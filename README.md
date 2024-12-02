@@ -1,7 +1,7 @@
 # GKE-Resiliency
 
+## Overview
 
-## Overview 
 This repository provides scripts to performing resiliency testing on **regional** Google Kubernetes Engine (GKE) clusters. These script helps you assess the fault tolerance, recovery mechanisms, and overall robustness of your GKE clusters under various stress scenarios.
 
 #### GKE Standard Clusters:
@@ -15,70 +15,76 @@ The approach taken for autopilot clusters is to continuously drain the nodes in 
 > **Note**  
 > The script is designed to simulate failover on the nodes hosting a specific application deployment. To do so, you must provide the namespace and deployment name of any service as input through environment variables.
 
-
 ## Prerequisites
 
-
 #### 1. Environment Setup
+
 Ensure you have the gcloud command-line tool installed. You can install it from [here](https://cloud.google.com/sdk/docs/install)
 
 Authenticate your Google Cloud account and set your project ID
 
 ```
 gcloud auth login
-gcloud config set project PROJECT_ID
+gcloud config set project <PROJECT_ID>
 ```
 
-#### 2. Set environment variables
+#### 2. Connect to the GKE cluster
 
-* GKE Standard:
+Connect to the GKE cluster from the command line, use the following command:
 
-    If you're testing a GKE Standard cluster, you'll need to configure the following environment variables:
+```bash
+gcloud container clusters get-credentials <CLUSTER_NAME> --region <REGION> --project <PROJECT_ID>
+```
 
-    ```
-    export NAMESPACE="default"              # Namespace hosting your deployment
-    export DEPLOYMENT_NAME="hello-server"   # Deployment Name
-    export GKE_CLUSTER_NAME="cluster-1"     # GKE cluster name
-    export REGION="us-central1"             # Region hosting cluster
-    export NODE_POOL="default-pool"         # Node Pool name
-    export NUM_NODES=2                      # Minimum number of nodes per zone
-    ```
+#### 3. Set environment variables
 
-* GKE Autopilot:
+- GKE Standard:
 
-    If you're testing a GKE Autopilot cluster, set the following environment variables:
+  If you're testing a GKE Standard cluster, you'll need to configure the following environment variables:
 
-    ```
-    export NAMESPACE="default"              # Namespace hosting your deployment
-    export DEPLOYMENT_NAME="hello-server"   # Deployment Name
-    export GKE_CLUSTER_NAME="cluster-1"     # GKE cluster name
-    export sleep_interval=120               # Time it takes for your pod to become fully available in seconds
-    export max_duration=600                   # Time duration for which zone should be unavailable in seconds
-    ```
+  ```
+  export NAMESPACE="default"              # Namespace hosting your deployment
+  export DEPLOYMENT_NAME="hello-server"   # Deployment Name
+  export GKE_CLUSTER_NAME="cluster-1"     # GKE cluster name
+  export REGION="us-central1"             # Region hosting cluster
+  export NODE_POOL="default-pool"         # Node Pool name
+  export NUM_NODES=2                      # Minimum number of nodes per zone
+  ```
+
+- GKE Autopilot:
+
+  If you're testing a GKE Autopilot cluster, set the following environment variables:
+
+  ```
+  export NAMESPACE="default"              # Namespace hosting your deployment
+  export DEPLOYMENT_NAME="hello-server"   # Deployment Name
+  export GKE_CLUSTER_NAME="cluster-1"     # GKE cluster name
+  export sleep_interval=120               # Time it takes for your pod to become fully available in seconds
+  export max_duration=600                 # Time duration for which zone should be unavailable in seconds
+  ```
 
 These environment variables allow the script to interact with your cluster and simulate failure scenarios appropriately.
 
-## Running the script
+## Running the script for GKE Standard Clusters
 
- 1. Clone the Repository
+1.  Clone the Repository
+
 ```
 git clone https://github.com/your-username/GKE-Resiliency.git
 cd GKE-Resiliency
-cd standard 
+cd standard
 ```
 
- 2. Permissions to run the script
-```
-chmod +x standard_resiliency.sh
-```
+2.  Execute the script
 
- 3. Execute the script
 ```
 ./standard_resiliency.sh
 ```
 
+> **Note**  
+> The steps outlined for GKE Standard Clusters also apply to GKE Autopilot Clusters - with the only difference being the `autopilot` folder in Step #1 and `autopilot_resiliency.sh` in Step #2. The commands and configurations remain the same, ensuring a consistent experience across both cluster types.
 
 ## References
 
-* [Simulate a zone failure in GKE regional clusters](https://cloud.google.com/kubernetes-engine/docs/tutorials/simulate-zone-failure)
-* [Safely Drain a Node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/)
+- [Simulate a zone failure in GKE regional clusters](https://cloud.google.com/kubernetes-engine/docs/tutorials/simulate-zone-failure)
+- [Safely Drain a Node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/)
