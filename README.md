@@ -52,28 +52,33 @@ gcloud config set project PROJECT_ID
     export NAMESPACE="default"              # Namespace hosting your deployment
     export DEPLOYMENT_NAME="hello-server"   # Deployment Name
     export GKE_CLUSTER_NAME="cluster-1"     # GKE cluster name
-    export sleep_interval=120               # Time it takes for your pod to become fully available 
-    export max_duration=600                   # Time duration for which zone should be unavailable
+    export sleep_interval=120               # Time it takes for your pod to become fully available in seconds
+    export max_duration=600                   # Time duration for which zone should be unavailable in seconds
     ```
 
 These environment variables allow the script to interact with your cluster and simulate failure scenarios appropriately.
 
 ## Running the script
 
-#### 1. Clone the Repository
-
+ 1. Clone the Repository
 ```
 git clone https://github.com/your-username/GKE-Resiliency.git
 cd GKE-Resiliency
 cd standard 
 ```
 
-#### 2. Give Permissions to the script
+ 2. Permissions to run the script
 ```
 chmod +x standard_resiliency.sh
 ```
 
-#### 3. Execute the script
+ 3. Execute the script
 ```
 ./standard_resiliency.sh
 ```
+
+
+## References
+
+* [Simulate a zone failure in GKE regional clusters](https://cloud.google.com/kubernetes-engine/docs/tutorials/simulate-zone-failure)
+* [Safely Drain a Node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/)
