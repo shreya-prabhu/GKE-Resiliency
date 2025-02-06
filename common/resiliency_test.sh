@@ -67,14 +67,13 @@ while true; do
   # Check if failover occurred by ensuring no pods are in the original failure zone
   if ! echo "$ALL_ZONES" | tr -d '\n' | grep -q "$FAILURE_ZONE"; then
     echo -e "\nNo pods starting with $DEPLOYMENT_NAME are in zone $FAILURE_ZONE. Failover is successful."
-    echo -e "The failover was successful, as GKE Autopilot provisioned a new node in a zone distinct from the original failure zone."
+    echo -e "The failover was successful, as GKE provisioned a new node in a zone distinct from the original failure zone."
     break
   else
 
   # Check if the elapsed time exceeds the max duration
   if [ $elapsed_time -ge $max_duration ]; then
     echo -e "\nAt the conclusion of this disaster recovery exercise, the pod has been rescheduled in the same target zone."
-    echo -e "This behavior is a result of the lack of user control over the location of node pools in Autopilot Clusters."
     echo -e "However, it is important to note that the pod has been rescheduled on a new node, and the original node prior to draining would be terminated."
     break
   fi
@@ -83,7 +82,7 @@ while true; do
     
   kubectl get nodes -o name -l "topology.kubernetes.io/zone=$FAILURE_ZONE" | xargs -I {} kubectl drain {} --namespace=$NAMESPACE --ignore-daemonsets --delete-emptydir-data --force --disable-eviction=true
     if [ $? -ne 0 ]; then
-      echo "Warning: Drain operation failed due to GKE Autopilot restrictions."
+      echo "Warning: Drain operation failed due to GKE restrictions."
     fi
 
     echo -e "\nSleeping for $sleep_interval seconds before rechecking..."
