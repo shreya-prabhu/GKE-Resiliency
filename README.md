@@ -65,6 +65,18 @@ gcloud container clusters get-credentials <CLUSTER_NAME> --region <REGION> --pro
 
 These environment variables allow the script to interact with your cluster and simulate failure scenarios appropriately.
 
+#### 4. IAM permissions for the user/service account
+These IAM permissions have to be granted to the user/service account running the script to read and manage cluster resources:
+- container.pods.list
+- container.nodes.get
+- container.nodes.list
+
+Potential roles that can be used are:
+- roles/container.admin
+- roles/container.clusterAdmin
+- roles/container.developer
+
+
 ## Running the script for GKE Standard Clusters
 
 1.  Clone the Repository
